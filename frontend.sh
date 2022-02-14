@@ -1,17 +1,39 @@
 #!/bin/bash
+#Ha már fent van a docker, akkor ezt a lépést kihagyja.
+dockercheck=$(docker --version | grep -o "Docker")
+if [ "$dockercheck" == "Docker" ]
+then
+echo "Docker already installed!"
+else
 sudo apt-get update
 curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker ubuntu
 sudo apt-get install docker-compose
-mkdir /home/ubuntu/tomcat-docker
-touch /home/ubuntu/tomcat-docker/Dockerfile
-#Dockerfile tomcat:
-echo "FROM tomcat:9.0.41-jdk11
-VOLUME /tmp/volume
-COPY todo-mvc.war /tmp/volume/
-ADD todo-mvc.war /usr/local/tomcat/webapps
-RUN mv /usr/local/tomcat/webapps/todo-mvc.war /usr/local/tomcat/webapps/ROOT.war
+fi
+#Ha már létezik a repónak mappa, lehúzza a módosításokat,
+#ha még nincs akkor klónozza a gépre.
+if [ -d /home/ubuntu/api-server-example ]
+then
+echo "Pulling the repository."
+git pull
+else
+echo "Cloning the repository."
+git clone https://github.com/atomrichard/api-server-example.git
+touch /home/ubuntu/api-server-example/Dockerfile
+touch /home/ubuntu/api-server-example/.dockerignore
+fi
+#Dockerignore:
+echo "node_modules
+npm-debug.log" >> /home/ubuntu/api-server-example/.dockerignore
+#Dockerfile node:
+echo "FROM node:16
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
 EXPOSE 8080
-CMD ["catalina.sh","run"]" >> /home/ubuntu/tomcat-docker/Dockerfile
-#Megy a git clone ubuntun, ide megy majd a repo
-#git clone
+CMD [ "node", "server.js" ]" >> /home/ubuntu/api-server-example/Dockerfile
+#image build
+docker build . -t ubuntu/node-web-app
+#run container
+docker run -p 8080:8080 -d ubuntu/node-web-app
