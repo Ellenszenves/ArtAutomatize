@@ -15,13 +15,21 @@ fi
 if [ -d /home/ubuntu/api-server-example ]
 then
 echo "Pulling the repository."
-git pull
+gitpull=$(git -C /home/ubuntu/api-server-example/ pull)
+    if [ "$gitpull" == "Already up to date." ]
+    then
+    echo "Build is up-to-date."
+    else
+    #image build
+    docker build . -t ubuntu/node-web-app
+    #run container
+    docker run -p 8080:8080 -d ubuntu/node-web-app
+    fi
 else
 echo "Cloning the repository."
 git clone https://github.com/atomrichard/api-server-example.git
 touch /home/ubuntu/api-server-example/Dockerfile
 touch /home/ubuntu/api-server-example/.dockerignore
-fi
 #Dockerignore:
 echo "node_modules
 npm-debug.log" >> /home/ubuntu/api-server-example/.dockerignore
@@ -37,3 +45,4 @@ CMD [ "node", "server.js" ]" >> /home/ubuntu/api-server-example/Dockerfile
 docker build . -t ubuntu/node-web-app
 #run container
 docker run -p 8080:8080 -d ubuntu/node-web-app
+fi
