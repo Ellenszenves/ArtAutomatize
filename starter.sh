@@ -75,12 +75,16 @@ desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=
             starter
             fi
         else
-        scp -i "/home/ubuntu/host/monet-project.pem" Dockerfile ubuntu@$ip1:/home/ubuntu
-        scp -i "/home/ubuntu/host/monet-project.pem" docker-compose.yml ubuntu@$ip1:/home/ubuntu
-        scp -i "/home/ubuntu/host/monet-project.pem" .dockerignore ubuntu@$ip1:/home/ubuntu
-        scp -i "/home/ubuntu/host/monet-project.pem" frontendstart.sh ubuntu@$ip1:/home/ubuntu
-        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip1 < frontend.sh
-        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip2 < backend.sh
+        scp -i "/home/ubuntu/host/monet-project.pem" ./frontend/Dockerfile ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./frontend/docker-compose.yml ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./frontend/.dockerignore ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./frontend/frontendstart.sh ubuntu@$ip1:/home/ubuntu
+        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip1 < ./frontend/frontend.sh
+        scp -i "/home/ubuntu/host/monet-project.pem" ./backend/Dockerfile ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./backend/docker-compose.yml ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./backend/.dockerignore ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" ./backend/frontendstart.sh ubuntu@$ip1:/home/ubuntu
+        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip2 < ./backend/backend.sh
         starter
         fi
 fi

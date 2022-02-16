@@ -13,8 +13,8 @@ gitpull=$(git -C /home/ubuntu/ArtMag-Monet pull)
 else
 echo "Cloning the repository."
 git clone https://github.com/gegenypeter/ArtMag-Monet.git
-cp Dockerfile /home/ubuntu/ArtMag-Monet/frontend/
-cp docker-compose.yml /home/ubuntu/ArtMag-Monet/frontend/
-cp .dockerignore /home/ubuntu/ArtMag-Monet/frontend/
-sudo docker-compose -f /home/ubuntu/ArtMag-Monet/frontend/docker-compose.yml up -d
+cp Dockerfile ~/ArtMag-Monet/frontend/
+cp docker-compose.yml ~/ArtMag-Monet/frontend/
+cp .dockerignore ~/ArtMag-Monet/frontend/
+sudo docker-compose -f ~/ArtMag-Monet/frontend/docker-compose.yml up -d
 fi
