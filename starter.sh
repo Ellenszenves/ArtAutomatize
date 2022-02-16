@@ -9,12 +9,12 @@ if [ -z "$desc" ]
 then
 aws ec2 run-instances --image-id ami-042ad9eec03638628 \
 --count 1 --instance-type t2.micro --key-name monet-project \
---security-group-ids sg-08fb876c08317c18c \
+--security-group-ids sg-07dbad0270e4a4956 \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=monet-frontend}]'
 
 aws ec2 run-instances --image-id ami-042ad9eec03638628 \
 --count 1 --instance-type t2.micro --key-name monet-project \
---security-group-ids sg-08fb876c08317c18c \
+--security-group-ids sg-0f23178cb3d8d2520 \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=monet-backend}]'
 starter
 else

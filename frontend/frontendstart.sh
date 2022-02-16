@@ -7,8 +7,8 @@ gitpull=$(git -C /home/ubuntu/ArtMag-Monet pull)
     then
     echo "Build is up-to-date!"
     else
-    sudo docker-compose -f /home/ubuntu/ArtMag-Monet/frontend/docker-compose.yml down
     sudo docker-compose -f /home/ubuntu/ArtMag-Monet/frontend/docker-compose.yml up -d
+    sudo docker image prune -f
     fi
 else
 echo "Cloning the repository."

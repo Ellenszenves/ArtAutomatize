@@ -1,0 +1,17 @@
+version: '3.2'
+services:
+  db:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    volumes:
+      - type : volume
+        source: db_data
+        target: /var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_USER: monet
+      POSTGRES_PASSWORD: monet
+      POSTGRES_DB: monet
+volumes:
+  db_data:

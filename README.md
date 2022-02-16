@@ -2,6 +2,8 @@
 Starter.sh - Ezzel elindíthatunk két EC2 gépet, egyet a frontendnek, egyet a backendnek.
   Felmásolhatjuk vele a gépekre a szükséges fájlokat.
 
+#FRONTEND
+
 frontend.sh - Ez a script telepíti fel a dockert a gépekre, ha még nincs fent.
   A starter.sh használja ezt a scriptet, nem kell külön használni.
 
@@ -21,3 +23,11 @@ grep CRON /var/log/syslog - ezzel kiírathatjuk a cron logjait.
 1-59/2 * * * * /home/ubuntu/teszt.sh - Minden második percben elindul a script, output
 nincs, ha szeretnénk, akkor vagy telepítünk egy mail alkalmazást, vagy így írjuk be:
 1-59/2 * * * * /home/ubuntu/teszt.sh >/dev/null 2>&1
+
+#BACKEND
+
+Egyelőre a backend mappában levő docker-compose.yml fájl kerül át az EC2-es backend gépre.
+Ez a backend mappában landol, elindítva egy PostgreSQL szerver indul, 5432-es porton.
+Username: monet
+Password: monet
+Database: monet

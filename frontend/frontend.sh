@@ -13,5 +13,5 @@ else
 sudo apt-get update
 curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker ubuntu
-sudo apt-get install docker-compose
+sudo apt-get install -y docker-compose
 fi
