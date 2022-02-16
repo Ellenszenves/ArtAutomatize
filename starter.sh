@@ -1,5 +1,7 @@
 #!/bin/bash
 #Közös kulcs: monet-project.pem
+#crontab -e --> crontab hozzáadása, megtekintése 
+#grep CRON /var/log/syslog --> cron logjai
 start_instances() {
 desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=instance-state-name,Values=running" \
        --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,InstanceId,Tags[?Key==`Name`].Value]')
@@ -58,6 +60,7 @@ starter
 fi
 }
 
+#Felmásolja a szükséges fájlokat, és feltelepíti a dockert, docker-compose-t.
 install_docker() {
 desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=instance-state-name,Values=running" \
        --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,InstanceId,Tags[?Key==`Name`].Value]')
@@ -72,6 +75,10 @@ desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=
             starter
             fi
         else
+        scp -i "/home/ubuntu/host/monet-project.pem" Dockerfile ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" docker-compose.yml ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" .dockerignore ubuntu@$ip1:/home/ubuntu
+        scp -i "/home/ubuntu/host/monet-project.pem" frontendstart.sh ubuntu@$ip1:/home/ubuntu
         ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip1 < frontend.sh
         ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip2 < backend.sh
         starter
