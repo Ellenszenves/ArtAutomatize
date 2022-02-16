@@ -12,3 +12,7 @@ ezt manuálisan kell végrehajtani.
 crontab -e a crontabunk megnyitása, ide lehet beírni, hogy milyen időközönként és
 milyen scriptet indítson el a gép. 
 Default beállításom az, hogy percenként indítja a /home/ubuntu/frontendstart.sh-t.
+grep CRON /var/log/syslog - ezzel kiírathatjuk a cron logjait.
+1-59/2 * * * * /home/ubuntu/teszt.sh - Minden második percben elindul a script, output
+nincs, ha szeretnénk, akkor vagy telepítünk egy mail alkalmazást, vagy így írjuk be:
+1-59/2 * * * * /home/ubuntu/teszt.sh >/dev/null 2>&1
