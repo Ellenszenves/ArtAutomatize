@@ -1,17 +1,17 @@
 #!/bin/bash
-#CSINÁLNI KULCSOT A CSAPATNAK AWS-EN!!!!!
+#Közös kulcs: monet-project.pem
 start_instances() {
 desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=instance-state-name,Values=running" \
        --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,InstanceId,Tags[?Key==`Name`].Value]')
 if [ -z "$desc" ]
 then
 aws ec2 run-instances --image-id ami-042ad9eec03638628 \
---count 1 --instance-type t2.micro --key-name erdelyi-tamas \
+--count 1 --instance-type t2.micro --key-name monet-project \
 --security-group-ids sg-08fb876c08317c18c \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=monet-frontend}]'
 
 aws ec2 run-instances --image-id ami-042ad9eec03638628 \
---count 1 --instance-type t2.micro --key-name erdelyi-tamas \
+--count 1 --instance-type t2.micro --key-name monet-project \
 --security-group-ids sg-08fb876c08317c18c \
 --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=monet-backend}]'
 starter
@@ -72,8 +72,8 @@ desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=
             starter
             fi
         else
-        ssh -i "/home/ubuntu/host/erdelyi-tamas.pem" ubuntu@$ip1 < frontend.sh
-        ssh -i "/home/ubuntu/host/erdelyi-tamas.pem" ubuntu@$ip2 < backend.sh
+        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip1 < frontend.sh
+        ssh -i "/home/ubuntu/host/monet-project.pem" ubuntu@$ip2 < backend.sh
         starter
         fi
 fi

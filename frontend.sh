@@ -1,5 +1,5 @@
 #!/bin/bash
-#Ha már fent van a docker, akkor ezt a lépést kihagyja.
+#Ha már fent van a docker, akkor ezt a lépést kihagyja. docker-compose down
 dockercheck=$(docker --version | grep -o "Docker")
 if [ "$dockercheck" == "Docker" ]
 then
@@ -39,10 +39,13 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 8080
+EXPOSE 3000
 CMD [ "node", "server.js" ]" >> /home/ubuntu/api-server-example/Dockerfile
 #image build
 docker build . -t ubuntu/node-web-app
 #run container
-docker run -p 8080:8080 -d ubuntu/node-web-app
+docker run -p 3000:3000 -d ubuntu/node-web-app
 fi
+#Mongo database teszt:
+docker run --name mongo-teszt -d mongo:latest
+#Mongo docker-compose tesz:
