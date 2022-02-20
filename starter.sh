@@ -2,6 +2,7 @@
 #Közös kulcs: monet-project.pem
 #crontab -e --> crontab hozzáadása, megtekintése 
 #grep CRON /var/log/syslog --> cron logjai
+#docker-compose --force-recreate, --build
 start_instances() {
 desc=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=monet*" "Name=instance-state-name,Values=running" \
        --output text --query 'Reservations[*].Instances[*].[PublicIpAddress,InstanceId,Tags[?Key==`Name`].Value]')

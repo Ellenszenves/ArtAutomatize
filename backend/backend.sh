@@ -1,6 +1,9 @@
 #!/bin/bash
+#docker build -t tomcat-in-a-box .
+#docker run -dp 8080:8080 --mount type=bind,source=/home/ubuntu/backend/setenv.sh,target=/usr/local/tomcat/bin/setenv.sh fileshare
 sudo chmod 777 backendstart.sh
 mkdir ~/backend
+mkdir ~/backendpsql
 mv ~/Dockerfile ~/backend/Dockerfile
 mv ~/docker-compose.yml ~/backend/docker-compose.yml
 mv ~/.dockerignore ~/backend/.dockerignore
