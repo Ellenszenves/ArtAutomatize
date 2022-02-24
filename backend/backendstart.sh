@@ -1,30 +1,31 @@
 #!/bin/bash
-#sudo lsof -nP -iTCP -sTCP:LISTEN | grep 8080 | cut -d " " -f 7 -- PID of the running process
-if [ -d /var/lib/jenkins/common-fileshare-starter ]
+if [ -d /home/fallouterdo/common-fileshare-starter ]
 then
-dockeron=$(lsof -nP -iTCP -sTCP:LISTEN | grep -o 8080)
-if [ -z "$dockeron" ]
-then
-export DRIVER_CLASS_NAME="org.postgresql.Driver"
-export LOGIN="monet"
-export PASSWORD="monet"
-export URL="jdbc:postgresql://3.125.151.179:5432/monet"
-pid=$(lsof -nP -iTCP -sTCP:LISTEN | grep 8080 | cut -d " " -f 7)
-kill $pid
-cd /var/lib/jenkins/common-fileshare-starter
-git pull
-mvn package
-cd /var/lib/jenkins/common-fileshare-starter/target
-BUILD_ID=dontKillMe nohup java -jar fileshare-0.0.1-SNAPSHOT.jar >> output.logs &
-fi
+echo "Pulling the repository!"
+gitpull=$(git -C /home/fallouterdo/common-fileshare-starter pull)
+    if [ "$gitpull" == "Already up to date." ]
+    then
+    echo "Build is up-to-date!"
+    dockeron=$(docker ps | grep -o "8080")
+        if [ -z "$dockeron" ]
+        then
+        cd /home/fallouterdo/common-fileshare-starter
+        docker image prune -f
+        docker-compose up --build -d
+        else
+        echo "Docker is up and running!"
+        fi
+    else
+    cd /home/fallouterdo/common-fileshare-starter
+    docker image prune -f
+    docker-compose up --build -d
+    fi
 else
+echo "Cloning the repository."
+cd /home/fallouterdo/
 git clone https://github.com/dokaattila/common-fileshare-starter.git
-export DRIVER_CLASS_NAME="org.postgresql.Driver"
-export LOGIN="monet"
-export PASSWORD="monet"
-export URL="jdbc:postgresql://3.125.151.179:5432/monet"
-cd /var/lib/jenkins/common-fileshare-starter
-mvn package
-cd /var/lib/jenkins/common-fileshare-starter/target
-nohup java -jar fileshare-0.0.1-SNAPSHOT.jar &
+cp /home/fallouterdo/backend/Dockerfile /home/fallouterdo/common-fileshare-starter/Dockerfile
+cp /home/fallouterdo/backend/docker-compose.yml /home/fallouterdo/common-fileshare-starter/docker-compose.yml
+cd /home/fallouterdo/common-fileshare-starter
+docker-compose up -d
 fi
