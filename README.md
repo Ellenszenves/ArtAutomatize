@@ -1,33 +1,13 @@
 # ArtAutomatize
-Starter.sh - Ezzel elindíthatunk két EC2 gépet, egyet a frontendnek, egyet a backendnek.
-  Felmásolhatjuk vele a gépekre a szükséges fájlokat.
+Nem automata script amilyennek indult, mert átköltöztem Google Cloud-ra.
 
-#FRONTEND
+Minden szolgáltatás dockerrel futtatható, de nem univerzálisak a kódok,
+pár dolgot specifikusan át kell írni valószínűleg, de indulásnak jó.
 
-frontend.sh - Ez a script telepíti fel a dockert a gépekre, ha még nincs fent.
-  A starter.sh használja ezt a scriptet, nem kell külön használni.
-
-frontendstart.sh - Ezt használhatjuk a cron-al, hogy csekkolja a github repository-t.
-  Ha még nincs a gépen a repo, akkor leklónozza és lebuildeli docker-compose-al.
-  Ha ez már megvan, akkor azt csekkolja, hogy van e változás a repóban.
-  Ha van, akkor pull-olja, leállítja a docker-compose-t, és újra megcsinálja.
-
-Még nem jöttem rá, hogyan kell automatizálni egy crontab létrehozását, így addig
-ezt manuálisan kell végrehajtani.
-
-crontab -e a crontabunk megnyitása, ide lehet beírni, hogy milyen időközönként és
-milyen scriptet indítson el a gép. 
-
-Default beállításom az, hogy percenként indítja a /home/ubuntu/frontendstart.sh-t.
-grep CRON /var/log/syslog - ezzel kiírathatjuk a cron logjait.
-1-59/2 * * * * /home/ubuntu/teszt.sh - Minden második percben elindul a script, output
-nincs, ha szeretnénk, akkor vagy telepítünk egy mail alkalmazást, vagy így írjuk be:
-1-59/2 * * * * /home/ubuntu/teszt.sh >/dev/null 2>&1
-
-#BACKEND
-
-Egyelőre a backend mappában levő docker-compose.yml fájl kerül át az EC2-es backend gépre.
-Ez a backend mappában landol, elindítva egy PostgreSQL szerver indul, 5432-es porton.
-Username: monet
-Password: monet
-Database: monet
+Az sh fájlokat a jenkins-be adtam meg, de ezeket akár crontab-ba is
+meg lehet adni, viszont vannak webhook-os verziók is, azokat nem
+rakom ide külön, úgy még ennyi kód sem kell.
+Nem tökéletes még mert ha valaki merge-el a giten több branch-et
+azzal nem tud mit kezdeni a docker pull néha és megmakkan rajta.
+Erre lehet megoldás, hogy legyaluljuk a repó mappáját és
+újra leklónozzuk a repository-t.
