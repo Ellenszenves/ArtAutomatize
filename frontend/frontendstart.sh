@@ -29,3 +29,5 @@ cp .dockerignore ~/ArtMag-Monet/frontend/
 cd /home/ubuntu/ArtMag-Monet/frontend
 sudo docker-compose -f ~/ArtMag-Monet/frontend/docker-compose.yml up -d
 fi
+#start backend in the background
+nohup node index.js &

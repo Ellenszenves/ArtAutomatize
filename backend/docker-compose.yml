@@ -13,16 +13,15 @@ services:
       POSTGRES_USER: monet
       POSTGRES_PASSWORD: monet
       POSTGRES_DB: monet
-  tomcat:
+  javaserver:
     build: .
     ports:
       - "8080:8080"
-    restart: always
     environment:
-      DRIVER_CLASS_NAME: org.postgresql.Driver
+      URL: jdbc:postgresql://34.159.141.214:5432/monet
       LOGIN: monet
       PASSWORD: monet
-      URL: jdbc:postgresql://3.125.151.179:5432/monet
+      DRIVER_CLASS_NAME: org.postgresql.Driver
 
 volumes:
   db_data:

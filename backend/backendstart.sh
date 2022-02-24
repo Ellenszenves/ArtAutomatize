@@ -1,20 +1,30 @@
 #!/bin/bash
-if [ -d /home/ubuntu/ArtMag-Monet-backend ]
+#sudo lsof -nP -iTCP -sTCP:LISTEN | grep 8080 | cut -d " " -f 7 -- PID of the running process
+if [ -d /var/lib/jenkins/common-fileshare-starter ]
 then
-echo "Pulling the repository!"
-gitpull=$(git -C /home/ubuntu/ArtMag-Monet-backend pull)
-    if [ "$gitpull" == "Already up to date." ]
-    then
-    echo "Build is up-to-date!"
-    else
-    sudo docker-compose -f /home/ubuntu/ArtMag-Monet-backend/backend/docker-compose.yml down
-    sudo docker-compose -f /home/ubuntu/ArtMag-Monet-backend/backend/docker-compose.yml up -d
-    fi
+dockeron=$(lsof -nP -iTCP -sTCP:LISTEN | grep -o 8080)
+if [ -z "$dockeron" ]
+then
+export DRIVER_CLASS_NAME="org.postgresql.Driver"
+export LOGIN="monet"
+export PASSWORD="monet"
+export URL="jdbc:postgresql://3.125.151.179:5432/monet"
+pid=$(lsof -nP -iTCP -sTCP:LISTEN | grep 8080 | cut -d " " -f 7)
+kill $pid
+cd /var/lib/jenkins/common-fileshare-starter
+git pull
+mvn package
+cd /var/lib/jenkins/common-fileshare-starter/target
+BUILD_ID=dontKillMe nohup java -jar fileshare-0.0.1-SNAPSHOT.jar >> output.logs &
+fi
 else
-echo "Cloning the repository."
-git clone https://github.com/gegenypeter/ArtMag-Monet-backend.git
-cp Dockerfile ~/ArtMag-Monet-backend/backend/
-cp docker-compose.yml ~/ArtMag-Monet-backend/backend/
-cp .dockerignore ~/ArtMag-Monet-backend/backend/
-sudo docker-compose -f ~/ArtMag-Monet-backend/backend/docker-compose.yml up -d
+git clone https://github.com/dokaattila/common-fileshare-starter.git
+export DRIVER_CLASS_NAME="org.postgresql.Driver"
+export LOGIN="monet"
+export PASSWORD="monet"
+export URL="jdbc:postgresql://3.125.151.179:5432/monet"
+cd /var/lib/jenkins/common-fileshare-starter
+mvn package
+cd /var/lib/jenkins/common-fileshare-starter/target
+nohup java -jar fileshare-0.0.1-SNAPSHOT.jar &
 fi
